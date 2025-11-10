@@ -1,6 +1,25 @@
 local M = {}
 M.ducks_list = {}
-local conf = {character="🦆", speed=10, width=2, height=1, color="none", blend=100}
+
+---@class DuckOpts
+---@field character string
+---@field blend number
+---@field border string
+---@field color string
+---@field height number
+---@field speed number
+---@field width number
+
+---@type DuckOpts
+local conf = {
+    character="🦆",
+    speed=10,
+    width=2,
+    height=1,
+    color="none",
+    blend=100,
+    border="none"
+}
 
 -- TODO: a mode to wreck the current buffer?
 local waddle = function(duck, speed)
@@ -53,7 +72,7 @@ M.hatch = function(character, speed, color)
     vim.api.nvim_buf_set_lines(buf , 0, 1, true , {character or conf.character})
 
     local duck = vim.api.nvim_open_win(buf, false, {
-        relative='cursor', style='minimal', row=1, col=1, width=conf.width, height=conf.height
+        relative='cursor', style='minimal', row=1, col=1, width=conf.width, height=conf.height, border=conf.border
     })
     vim.cmd("hi Duck"..duck.." guifg=" .. (color or conf.color) .. " guibg=none blend=" .. conf.blend)
     vim.api.nvim_win_set_option(duck, 'winhighlight', 'Normal:Duck'..duck)
@@ -88,6 +107,7 @@ M.cook_all = function()
     end
 end
 
+---@param opts DuckOpts
 M.setup = function(opts)
     conf = vim.tbl_deep_extend('force', conf, opts or {})
 end
