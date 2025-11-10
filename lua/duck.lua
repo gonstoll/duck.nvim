@@ -12,13 +12,13 @@ M.ducks_list = {}
 
 ---@type DuckOpts
 local conf = {
-    character="🦆",
-    speed=10,
-    width=2,
-    height=1,
-    color="none",
-    blend=100,
-    border="none"
+    character = "🦆",
+    speed = 10,
+    width = 2,
+    height = 1,
+    color = "none",
+    blend = 100,
+    border = "none"
 }
 
 -- TODO: a mode to wreck the current buffer?
@@ -38,25 +38,25 @@ local waddle = function(duck, speed)
                 col, row = config["col"], config["row"]
             end
 
-            math.randomseed(os.time()*duck)
+            math.randomseed(os.time() * duck)
             local angle = 2 * math.pi * math.random()
             local s = math.sin(angle)
             local c = math.cos(angle)
 
             if row < 0 and s < 0 then
-              row = vim.o.lines
+                row = vim.o.lines
             end
 
-            if row > vim.o.lines  and s > 0 then
-              row = 0
+            if row > vim.o.lines and s > 0 then
+                row = 0
             end
 
             if col < 0 and c < 0 then
-              col = vim.o.columns
+                col = vim.o.columns
             end
 
             if col > vim.o.columns and c > 0 then
-              col = 0
+                col = 0
             end
 
             config["row"] = row + 0.5 * s
@@ -69,13 +69,19 @@ end
 
 M.hatch = function(character, speed, color)
     local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(buf , 0, 1, true , {character or conf.character})
+    vim.api.nvim_buf_set_lines(buf, 0, 1, true, {character or conf.character})
 
     local duck = vim.api.nvim_open_win(buf, false, {
-        relative='cursor', style='minimal', row=1, col=1, width=conf.width, height=conf.height, border=conf.border
+        relative = 'cursor',
+        style = 'minimal',
+        row = 1,
+        col = 1,
+        width = conf.width,
+        height = conf.height,
+        border = conf.border,
     })
-    vim.cmd("hi Duck"..duck.." guifg=" .. (color or conf.color) .. " guibg=none blend=" .. conf.blend)
-    vim.api.nvim_win_set_option(duck, 'winhighlight', 'Normal:Duck'..duck)
+    vim.cmd("hi Duck" .. duck .. " guifg=" .. (color or conf.color) .. " guibg=none blend=" .. conf.blend)
+    vim.api.nvim_win_set_option(duck, 'winhighlight', 'Normal:Duck' .. duck)
 
     waddle(duck, speed)
 end
